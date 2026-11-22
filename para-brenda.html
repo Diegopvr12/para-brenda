@@ -1,0 +1,1622 @@
+<title>Para Brenda</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Quicksand:wght@400;600;700&display=swap">
+
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+
+  :root {
+    --bg: #12060c;
+    --fg: #fff1f5;
+    --muted: #f0b8c8;
+    --blush: #ffd1dc;
+    --gold: #f7d38a;
+    --rose: #ff5c8a;
+    --glow: rgba(255, 92, 138, .52);
+    --display: "Playfair Display", Georgia, "Times New Roman", serif;
+    --script: "Great Vibes", "Brush Script MT", cursive;
+    --body: "Quicksand", "Segoe UI", system-ui, -apple-system, sans-serif;
+    --ease-out: cubic-bezier(.22, 1, .36, 1);
+    --ease-soft: cubic-bezier(.2, .7, .2, 1);
+    --ease-iris: cubic-bezier(.6, 0, .2, 1);
+    color-scheme: dark;
+  }
+
+  html, body { height: 100%; }
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--body);
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Aura: two slow glows drifting behind everything */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: -15%;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at 50% -5%, rgba(255, 92, 138, .2), transparent 55%),
+      radial-gradient(circle at 25% 25%, rgba(255, 92, 138, .11), transparent 45%),
+      radial-gradient(circle at 78% 72%, rgba(247, 211, 138, .1), transparent 48%),
+      radial-gradient(circle at 50% 115%, rgba(247, 211, 138, .11), transparent 60%);
+    animation: auraDrift 16s ease-in-out infinite alternate;
+  }
+  @keyframes auraDrift {
+    0%   { transform: translate3d(-2%, -1.5%, 0) scale(1); }
+    100% { transform: translate3d(2%, 2%, 0) scale(1.05); }
+  }
+
+  /* Vignette */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background: radial-gradient(ellipse at center, transparent 44%, rgba(0, 0, 0, .56) 100%);
+  }
+
+  #fx {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* ============ Intro ============ */
+  .intro {
+    position: fixed;
+    inset: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-block: 24px;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    background:
+      radial-gradient(circle at 50% 40%, rgba(255, 92, 138, .16), transparent 55%),
+      radial-gradient(circle at 50% 50%, #1c0812 0%, #0a0307 100%);
+    transition: opacity 1.2s ease, visibility 1.2s ease;
+  }
+  .intro.hidden {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  .intro-card {
+    text-align: center;
+    max-width: 26rem;
+    padding: 2rem 1.5rem;
+    animation: introIn 1.4s var(--ease-out) .2s both;
+  }
+  @keyframes introIn {
+    from { opacity: 0; transform: translateY(20px); filter: blur(10px); }
+    to   { opacity: 1; transform: none; filter: none; }
+  }
+
+  .intro-heart {
+    width: 70px;
+    height: 70px;
+    margin: 0 auto 1.35rem;
+    filter: drop-shadow(0 0 30px var(--glow));
+    animation: introHeart 2.2s ease-in-out infinite;
+  }
+  @keyframes introHeart {
+    0%, 100% { transform: scale(1); }
+    50%      { transform: scale(1.1); }
+  }
+
+  .intro-kicker {
+    margin: 0 0 .4rem;
+    font-size: .72rem;
+    font-weight: 700;
+    letter-spacing: .48em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  .intro-title {
+    margin: 0 0 .35rem;
+    font-family: var(--script);
+    font-weight: 400;
+    font-size: clamp(3.1rem, 14vw, 4.7rem);
+    line-height: 1;
+    color: var(--blush);
+    text-shadow: 0 0 36px var(--glow);
+  }
+
+  .intro-sub {
+    margin: 0 0 .4rem;
+    font-family: var(--display);
+    font-style: italic;
+    font-size: clamp(1rem, 3.8vw, 1.16rem);
+    color: var(--muted);
+  }
+
+  .intro-song {
+    margin: 0 0 1.85rem;
+    font-size: .74rem;
+    letter-spacing: .12em;
+    color: rgba(247, 211, 138, .82);
+  }
+
+  .intro-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: .55rem;
+    font: 700 .82rem var(--body);
+    letter-spacing: .2em;
+    text-transform: uppercase;
+    color: var(--bg);
+    background: linear-gradient(135deg, var(--blush), var(--gold));
+    border: 0;
+    border-radius: 999px;
+    padding: .95rem 1.85rem;
+    cursor: pointer;
+    box-shadow: 0 8px 32px rgba(255, 92, 138, .38), 0 0 0 0 rgba(247, 211, 138, .35);
+    transition: transform .25s ease, box-shadow .3s ease;
+  }
+  .intro-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 40px rgba(255, 92, 138, .48), 0 0 0 8px rgba(247, 211, 138, .14);
+  }
+  .intro-btn:active { transform: translateY(0) scale(.98); }
+  .intro-btn:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+  .intro-btn svg { width: 16px; height: 16px; }
+
+  .intro-hint {
+    margin: 1.5rem 0 0;
+    font-size: .68rem;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: rgba(240, 184, 200, .52);
+  }
+
+  /* ============ Escenario ============ */
+  .stage {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    overflow: hidden;
+  }
+
+  .scene {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-block:
+      calc(68px + env(safe-area-inset-top, 0px))
+      calc(80px + env(safe-area-inset-bottom, 0px));
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scrollbar-width: none;
+    text-align: center;
+
+    opacity: 0;
+    pointer-events: none;
+    filter: blur(14px);
+    transform: scale(1.05);
+    transition:
+      opacity 1.05s ease,
+      filter 1.05s ease,
+      transform 1.35s var(--ease-soft),
+      clip-path 1.5s var(--ease-iris);
+  }
+  .scene::-webkit-scrollbar { width: 0; height: 0; }
+
+  .scene.on {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+    pointer-events: auto;
+  }
+
+  .wrap {
+    margin: auto;
+    width: 100%;
+    max-width: 34rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Iris: a circle opens from the center */
+  .scene.iris { clip-path: circle(0% at 50% 50%); filter: none; transform: none; }
+  .scene.iris.on { clip-path: circle(150% at 50% 50%); }
+
+  /* Slide: comes in from the right and leaves to the right */
+  .scene.slide { transform: translateX(10vw); filter: none; }
+  .scene.slide.on { transform: none; }
+
+  /* ============ Progreso ============ */
+  .progress {
+    position: fixed;
+    top: max(18px, env(safe-area-inset-top, 0px));
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 6;
+    display: flex;
+    gap: 10px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(18, 6, 12, .52);
+    border: 1px solid rgba(255, 209, 220, .14);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    opacity: 0;
+    transition: opacity .8s ease .35s;
+  }
+  body.started .progress { opacity: 1; }
+
+  .dot {
+    position: relative;
+    width: 8px;
+    height: 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: rgba(255, 209, 220, .28);
+    cursor: pointer;
+    transition: background .3s ease, transform .3s ease, box-shadow .3s ease;
+  }
+  .dot::before {
+    content: '';
+    position: absolute;
+    inset: -9px;
+    border-radius: 50%;
+  }
+  .dot:hover { background: rgba(255, 209, 220, .65); transform: scale(1.25); }
+  .dot.on {
+    background: var(--gold);
+    box-shadow: 0 0 10px rgba(247, 211, 138, .85);
+    transform: scale(1.35);
+  }
+  .dot:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+
+  /* ============ Escena 1 ============ */
+  .kicker {
+    margin: 0 0 .4rem;
+    font-size: .78rem;
+    font-weight: 700;
+    letter-spacing: .42em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 1s ease .15s, transform 1s ease .15s;
+  }
+  .scene.on .kicker { opacity: 1; transform: none; }
+
+  .big-name {
+    margin: 0;
+    font-family: var(--script);
+    font-weight: 400;
+    font-size: clamp(4.2rem, 20vw, 9rem);
+    line-height: 1.05;
+    color: var(--blush);
+    text-shadow: 0 0 44px var(--glow);
+  }
+
+  .glyph {
+    display: inline-block;
+    opacity: 0;
+    filter: blur(12px);
+    translate: 0 .38em;
+    transition: opacity .85s ease, filter .85s ease, translate .85s var(--ease-out);
+    transition-delay: calc(var(--i) * .12s + .4s);
+  }
+  .scene.on .glyph { opacity: 1; filter: none; translate: 0 0; }
+
+  .sub {
+    margin: .65rem 0 0;
+    font-family: var(--display);
+    font-style: italic;
+    font-size: clamp(1.05rem, 4.5vw, 1.35rem);
+    color: var(--muted);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 1.2s ease 1.35s, transform 1.2s ease 1.35s;
+  }
+  .scene.on .sub { opacity: 1; transform: none; }
+
+  /* ============ Escena 2 ============ */
+  .words { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+
+  .word {
+    position: absolute;
+    white-space: nowrap;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    filter: blur(8px);
+    text-shadow: 0 0 18px currentColor;
+    animation: wordIn 1.25s var(--ease-out) forwards, bob 6.5s ease-in-out infinite;
+  }
+  .f-script { font-family: var(--script); font-size: 1.5em; line-height: 1; }
+  .f-display { font-family: var(--display); font-style: italic; }
+  .f-body {
+    font-family: var(--body);
+    font-weight: 700;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    font-size: .7em;
+  }
+
+  .center-line {
+    margin: 0;
+    padding: .4rem 1rem;
+    border-radius: 999px;
+    background: rgba(18, 6, 12, .55);
+    border: 1px solid rgba(255, 209, 220, .14);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    font-family: var(--display);
+    font-style: italic;
+    font-size: clamp(1.8rem, 8vw, 3rem);
+    color: var(--fg);
+    text-shadow: 0 0 32px var(--glow);
+    animation: gentleFloat 4.2s ease-in-out infinite;
+  }
+
+  @keyframes gentleFloat {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-6px); }
+  }
+  @keyframes wordIn {
+    from { opacity: 0; filter: blur(8px); scale: .62; }
+    to   { opacity: .92; filter: blur(0); scale: 1; }
+  }
+  @keyframes bob {
+    0%, 100% { translate: 0 0; }
+    50%      { translate: 0 -10px; }
+  }
+
+  /* ============ Escena 3 ============ */
+  .letter-card {
+    width: 100%;
+    max-width: 31rem;
+    padding: 30px 26px 26px;
+    border-radius: 24px;
+    background: linear-gradient(180deg, rgba(255, 241, 245, .085), rgba(255, 241, 245, .025));
+    border: 1px solid rgba(247, 211, 138, .3);
+    box-shadow:
+      0 14px 64px rgba(0, 0, 0, .38),
+      0 0 72px rgba(255, 92, 138, .17),
+      inset 0 1px 0 rgba(255, 255, 255, .06);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    position: relative;
+  }
+
+  .ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: .55rem;
+    margin: .15rem 0 1.2rem;
+    color: var(--gold);
+    font-size: .85rem;
+    letter-spacing: .3em;
+    opacity: 0;
+    transition: opacity 1s ease .6s;
+  }
+  .scene.on .ornament { opacity: .88; }
+  .ornament::before,
+  .ornament::after {
+    content: '';
+    width: 34px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(247, 211, 138, .6), transparent);
+  }
+
+  .line {
+    margin: .9em 0;
+    font-size: clamp(1rem, 4vw, 1.14rem);
+    line-height: 1.65;
+    opacity: 0;
+    filter: blur(6px);
+    translate: 0 12px;
+    clip-path: inset(0 100% 0 0);
+    transition:
+      opacity .9s ease,
+      filter .9s ease,
+      translate .9s ease,
+      clip-path 1.2s var(--ease-iris);
+  }
+  .line:last-child { margin-bottom: 0; }
+  .line.shown {
+    opacity: 1;
+    filter: none;
+    translate: 0 0;
+    clip-path: inset(0 0 0 0);
+  }
+
+  .line.head {
+    margin-top: 0;
+    font-family: var(--script);
+    font-size: clamp(2.5rem, 11vw, 3.3rem);
+    line-height: 1.1;
+    color: var(--blush);
+    text-shadow: 0 0 24px rgba(255, 92, 138, .32);
+  }
+
+  .signature {
+    margin: 1.2rem 0 0;
+    text-align: right;
+    font-family: var(--script);
+    font-size: clamp(1.6rem, 6vw, 2rem);
+    color: var(--gold);
+    opacity: 0;
+    transition: opacity 1s ease 1s;
+  }
+  .scene.on .signature { opacity: .92; }
+
+  .scroll-hint {
+    margin-top: 1.4rem;
+    font-size: .68rem;
+    letter-spacing: .3em;
+    text-transform: uppercase;
+    color: rgba(240, 184, 200, .48);
+    opacity: 0;
+    transition: opacity .8s ease 1.2s;
+  }
+  .scene.on .scroll-hint { opacity: 1; }
+
+  /* ============ Escena 4 ============ */
+  .pulse {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .pulse-heart {
+    width: min(62vw, 270px);
+    height: auto;
+    animation: beat 1.55s ease-in-out infinite;
+    filter: drop-shadow(0 0 44px var(--glow));
+    position: relative;
+    z-index: 1;
+  }
+
+  .pulse-ring {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: min(62vw, 270px);
+    aspect-ratio: 100 / 92;
+    border-radius: 50%;
+    border: 1px solid rgba(247, 211, 138, .42);
+    transform: translateX(-50%);
+    pointer-events: none;
+    animation: pulseRing 2.3s ease-out infinite;
+  }
+  .pulse-ring.delay { animation-delay: 1.15s; }
+
+  @keyframes pulseRing {
+    0%   { transform: translateX(-50%) scale(1); opacity: .82; }
+    100% { transform: translateX(-50%) scale(1.52); opacity: 0; }
+  }
+
+  .pulse-text {
+    margin: 0;
+    font-family: var(--script);
+    font-size: clamp(2.2rem, 10vw, 3.4rem);
+    color: var(--blush);
+    line-height: 1.12;
+    text-shadow: 0 0 26px rgba(255, 92, 138, .32);
+    position: relative;
+    z-index: 1;
+  }
+
+  @keyframes beat {
+    0%, 100% { scale: 1; }
+    14%      { scale: 1.1; }
+    28%      { scale: 1; }
+    42%      { scale: 1.06; }
+    70%      { scale: 1; }
+  }
+
+  /* ============ Escena 5 ============ */
+  .final .wrap { gap: 1.35rem; }
+
+  .heart-wrap {
+    position: relative;
+    width: min(76vw, 370px);
+    aspect-ratio: 100 / 92;
+  }
+  .heart-wrap::after {
+    content: '';
+    position: absolute;
+    inset: 10%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(255, 92, 138, .32), transparent 70%);
+    filter: blur(22px);
+    opacity: 0;
+    transition: opacity 2s ease .8s;
+    z-index: -1;
+  }
+  .final.go .heart-wrap::after { opacity: 1; }
+  .final.go .heart-wrap { animation: beat 1.8s ease-in-out 3.1s infinite; }
+
+  .heart-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+
+  .heart-line {
+    fill: none;
+    stroke: var(--gold);
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 2.6s cubic-bezier(.5, 0, .3, 1);
+  }
+  .final.go .heart-line { stroke-dashoffset: 0; }
+
+  .heart-fill {
+    opacity: 0;
+    filter: drop-shadow(0 0 32px var(--glow));
+    transition: opacity 1.5s ease .55s;
+  }
+  .final.go .heart-fill { opacity: 1; }
+
+  .names {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+  .names > * {
+    opacity: 0;
+    filter: blur(8px);
+    transform: translateY(14px);
+    transition:
+      opacity 1.05s ease var(--d, 0s),
+      filter 1.05s ease var(--d, 0s),
+      transform 1.05s var(--ease-out) var(--d, 0s);
+  }
+  .final.go .names > * { opacity: 1; filter: none; transform: none; }
+
+  .names .n {
+    font-family: var(--script);
+    font-weight: 400;
+    font-size: clamp(2.8rem, 13vw, 4.6rem);
+    line-height: 1;
+    color: #fff;
+    text-shadow: 0 2px 24px rgba(120, 0, 40, .6);
+  }
+  .names .x {
+    font-family: var(--display);
+    font-style: italic;
+    font-size: clamp(1.2rem, 5vw, 1.6rem);
+    line-height: 1.3;
+    color: var(--gold);
+  }
+
+  .forever {
+    margin: 0;
+    font-family: var(--display);
+    font-style: italic;
+    letter-spacing: .14em;
+    color: var(--muted);
+    opacity: 0;
+    transition: opacity 1.3s ease 3.1s;
+  }
+  .final.go .forever { opacity: 1; }
+
+  /* ============ Botones ============ */
+  .again {
+    font: 700 .8rem var(--body);
+    letter-spacing: .18em;
+    text-transform: uppercase;
+    color: var(--fg);
+    background: transparent;
+    border: 1px solid rgba(247, 211, 138, .55);
+    border-radius: 999px;
+    padding: .75rem 1.45rem;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 1s ease 3.5s, background .3s ease, border-color .3s ease, transform .2s ease;
+  }
+  .final.go .again { opacity: 1; }
+  .again:hover { background: rgba(247, 211, 138, .14); border-color: var(--gold); }
+  .again:active { transform: scale(.97); }
+
+  .hud {
+    position: fixed;
+    left: max(16px, env(safe-area-inset-left, 0px));
+    right: max(16px, env(safe-area-inset-right, 0px));
+    bottom: max(16px, env(safe-area-inset-bottom, 0px));
+    z-index: 5;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity .8s ease .45s;
+  }
+  body.started .hud { opacity: 1; }
+
+  .hud-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    pointer-events: auto;
+  }
+
+  .ctrl-btn {
+    font: 700 .68rem var(--body);
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: rgba(18, 6, 12, .65);
+    border: 1px solid rgba(255, 209, 220, .24);
+    border-radius: 999px;
+    padding: .52rem .95rem;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: color .25s ease, border-color .25s ease, background .25s ease, transform .15s ease;
+    white-space: nowrap;
+  }
+  .ctrl-btn:hover { background: rgba(255, 209, 220, .14); color: var(--fg); }
+  .ctrl-btn:active { transform: scale(.96); }
+  .ctrl-btn[aria-pressed="true"] {
+    color: var(--gold);
+    border-color: rgba(247, 211, 138, .65);
+  }
+  .ctrl-btn:disabled { opacity: .45; cursor: default; }
+
+  .ctrl-btn.invite { animation: musicInvite 2.2s ease-in-out 3; }
+  @keyframes musicInvite {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(247, 211, 138, 0); border-color: rgba(255, 209, 220, .24); }
+    50%      { box-shadow: 0 0 0 8px rgba(247, 211, 138, .14); border-color: rgba(247, 211, 138, .55); }
+  }
+
+  .volume {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 76px;
+    height: 4px;
+    border-radius: 999px;
+    background: rgba(255, 209, 220, .22);
+    outline: none;
+    cursor: pointer;
+  }
+  .volume::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 10px rgba(247, 211, 138, .55);
+    cursor: pointer;
+    border: 0;
+  }
+  .volume::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: var(--gold);
+    box-shadow: 0 0 10px rgba(247, 211, 138, .55);
+    cursor: pointer;
+    border: 0;
+  }
+  .volume:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+
+  .again:focus-visible,
+  .ctrl-btn:focus-visible {
+    outline: 2px solid var(--gold);
+    outline-offset: 3px;
+  }
+
+  /* ============ Confeti ============ */
+  .confetti-layer {
+    position: fixed;
+    inset: 0;
+    z-index: 4;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .confetti-piece {
+    position: absolute;
+    top: -20px;
+    width: 9px;
+    height: 14px;
+    border-radius: 2px;
+    opacity: 0;
+    animation: confettiFall linear forwards;
+  }
+  @keyframes confettiFall {
+    0%   { opacity: 1; transform: translateY(0) rotate(0deg); }
+    100% { opacity: 0; transform: translateY(110vh) rotate(760deg); }
+  }
+
+  /* ============ Sin JS ============ */
+  .noscript {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: grid;
+    place-items: center;
+    margin: 0;
+    padding: 24px;
+    text-align: center;
+    font-family: var(--display);
+    font-style: italic;
+    font-size: 1.2rem;
+    color: var(--blush);
+    background: var(--bg);
+  }
+
+  /* ============ Adaptaciones ============ */
+  @media (max-height: 640px) {
+    .letter-card { padding: 22px 18px; border-radius: 18px; }
+    .line { margin: .65em 0; line-height: 1.5; }
+    .big-name { font-size: clamp(3.2rem, 17vw, 6rem); }
+    .heart-wrap { width: min(58vw, 240px); }
+    .pulse-heart, .pulse-ring { width: min(46vw, 180px); }
+    .intro-heart { width: 54px; height: 54px; margin-bottom: 1rem; }
+  }
+
+  @media (max-width: 480px) { .volume { width: 56px; } }
+
+  @media (max-width: 420px) {
+    .ctrl-btn { padding: .48rem .72rem; letter-spacing: .1em; font-size: .64rem; }
+    .hud { gap: 6px; }
+    .hud-group { gap: 6px; }
+  }
+
+  @media (max-width: 360px) {
+    .letter-card { padding: 20px 16px; }
+    .kicker { letter-spacing: .3em; }
+    .volume { display: none; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    body::before,
+    .word,
+    .center-line,
+    .pulse-heart,
+    .pulse-ring,
+    .intro-heart,
+    .final.go .heart-wrap,
+    .ctrl-btn.invite,
+    .confetti-piece { animation: none !important; }
+
+    .scene,
+    .glyph,
+    .line,
+    .heart-line,
+    .heart-fill,
+    .names > *,
+    .kicker,
+    .sub,
+    .forever,
+    .again,
+    .ornament,
+    .signature,
+    .scroll-hint { transition-duration: .01s !important; transition-delay: 0s !important; }
+
+    .scene.iris { clip-path: none !important; }
+    .intro-card { animation: none !important; }
+  }
+</style>
+
+<div class="intro" id="intro">
+  <div class="intro-card">
+    <svg class="intro-heart" viewBox="0 0 100 92" aria-hidden="true" focusable="false">
+      <defs>
+        <linearGradient id="ig" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#ffb3c6"/>
+          <stop offset="1" stop-color="#e0245e"/>
+        </linearGradient>
+      </defs>
+      <path d="M50 90 C50 90 4 60 4 30 C4 13 17 2 32 2 C41 2 47 7 50 14 C53 7 59 2 68 2 C83 2 96 13 96 30 C96 60 50 90 50 90 Z" fill="url(#ig)"/>
+    </svg>
+    <p class="intro-kicker">una sorpresa</p>
+    <h1 class="intro-title">Para ti</h1>
+    <p class="intro-sub">hecha con todo mi amor</p>
+    <p class="intro-song">♪ una melodía compuesta para ti</p>
+    <button class="intro-btn" id="start-btn" type="button">
+      <span>Abrir</span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <path d="M5 12h14M13 6l6 6-6 6"/>
+      </svg>
+    </button>
+    <p class="intro-hint">toca para comenzar</p>
+  </div>
+</div>
+
+<canvas id="fx" aria-hidden="true"></canvas>
+
+<nav class="progress" aria-label="Navegación de escenas">
+  <button class="dot on" type="button" data-scene="0" aria-label="Presentación" aria-current="step"></button>
+  <button class="dot" type="button" data-scene="1" aria-label="Palabras"></button>
+  <button class="dot" type="button" data-scene="2" aria-label="Carta"></button>
+  <button class="dot" type="button" data-scene="3" aria-label="Latido"></button>
+  <button class="dot" type="button" data-scene="4" aria-label="Final"></button>
+</nav>
+
+<main class="stage">
+  <section class="scene" id="s-intro">
+    <div class="wrap">
+      <p class="kicker">para</p>
+      <h2 class="big-name" id="big-name" aria-label="Brenda"></h2>
+      <p class="sub">hice esto solo para ti</p>
+    </div>
+  </section>
+
+  <section class="scene" id="s-words">
+    <div class="words" id="words" aria-hidden="true"></div>
+    <div class="wrap">
+      <p class="center-line">Esto es para ti</p>
+    </div>
+  </section>
+
+  <section class="scene iris" id="s-letter">
+    <div class="wrap">
+      <div class="letter-card">
+        <p class="line head">Brenda,</p>
+        <div class="ornament" aria-hidden="true">❦</div>
+        <p class="line">Desde que llegaste, todo tiene más color.</p>
+        <p class="line">Eres la razón de mis sonrisas, la calma de mis días y mi lugar favorito en el mundo.</p>
+        <p class="line">Gracias por ser tú: por tu risa, por tu forma de mirarme y por hacer que todo se sienta bien.</p>
+        <p class="line">Te amo más de lo que cabe en palabras, y quiero demostrártelo cada día.</p>
+        <p class="signature">— con amor</p>
+      </div>
+      <p class="scroll-hint">desliza para leer</p>
+    </div>
+  </section>
+
+  <section class="scene slide" id="s-pulse">
+    <div class="wrap">
+      <div class="pulse">
+        <div class="pulse-ring" aria-hidden="true"></div>
+        <div class="pulse-ring delay" aria-hidden="true"></div>
+        <svg class="pulse-heart" viewBox="0 0 100 92" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="hg1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ffb3c6"/>
+              <stop offset="1" stop-color="#e0245e"/>
+            </linearGradient>
+          </defs>
+          <path d="M50 90 C50 90 4 60 4 30 C4 13 17 2 32 2 C41 2 47 7 50 14 C53 7 59 2 68 2 C83 2 96 13 96 30 C96 60 50 90 50 90 Z" fill="url(#hg1)"/>
+        </svg>
+        <p class="pulse-text">Cada latido tiene tu nombre</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="scene iris final" id="s-final">
+    <div class="wrap">
+      <div class="heart-wrap">
+        <svg class="heart-svg" viewBox="0 0 100 92" aria-hidden="true" focusable="false">
+          <defs>
+            <linearGradient id="hg2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#ff8fab"/>
+              <stop offset="1" stop-color="#c2185b"/>
+            </linearGradient>
+          </defs>
+          <path class="heart-line" pathLength="1" d="M50 90 C50 90 4 60 4 30 C4 13 17 2 32 2 C41 2 47 7 50 14 C53 7 59 2 68 2 C83 2 96 13 96 30 C96 60 50 90 50 90 Z"/>
+          <path class="heart-fill" d="M50 90 C50 90 4 60 4 30 C4 13 17 2 32 2 C41 2 47 7 50 14 C53 7 59 2 68 2 C83 2 96 13 96 30 C96 60 50 90 50 90 Z" fill="url(#hg2)"/>
+        </svg>
+        <div class="names">
+          <span class="n" style="--d: 1.5s">Brenda</span>
+          <span class="x" style="--d: 2s">X</span>
+          <span class="n" style="--d: 2.4s">Diego</span>
+        </div>
+      </div>
+      <p class="forever">por siempre</p>
+      <button class="again" id="again" type="button">Ver de nuevo</button>
+    </div>
+  </section>
+</main>
+
+<div class="hud">
+  <div class="hud-group">
+    <button class="ctrl-btn" id="music" type="button" aria-pressed="false" title="Atajo: M">Activar música</button>
+    <input class="volume" id="volume" type="range" min="0" max="1" step="0.05" value="0.75" aria-label="Volumen de la música">
+  </div>
+  <div class="hud-group">
+    <button class="ctrl-btn" id="next-scene" type="button" title="Atajo: flechas o Espacio">Siguiente →</button>
+  </div>
+</div>
+
+<noscript>
+  <p class="noscript">Activa JavaScript para ver esta sorpresa 💗</p>
+</noscript>
+
+<script>
+(() => {
+  'use strict';
+
+  /* ---------- Base ---------- */
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const SPEED = reduceMotion ? 0.25 : 1;
+  const rnd = (a, b) => a + Math.random() * (b - a);
+  const shuffle = (arr) => {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  };
+  const $ = (id) => document.getElementById(id);
+
+  const body = document.body;
+  const stage = document.querySelector('.stage');
+  const intro = $('intro');
+  const startBtn = $('start-btn');
+  const nextBtn = $('next-scene');
+  const dots = [...document.querySelectorAll('.dot')];
+  const musicBtn = $('music');
+  const volumeInput = $('volume');
+  const finalEl = $('s-final');
+  const letterLines = [...document.querySelectorAll('#s-letter .line')];
+  const supportsInert = 'inert' in HTMLElement.prototype;
+
+  const SCENES = ['s-intro', 's-words', 's-letter', 's-pulse', 's-final'];
+  let current = 0;
+
+  let musicOn = false;
+  let musicFailed = false;
+  let resumeOnShow = false;
+
+  /* ---------- Escenas ---------- */
+  function showScene(id) {
+    const idx = SCENES.indexOf(id);
+    SCENES.forEach((sid, i) => {
+      const el = $(sid);
+      const on = i === idx;
+      el.classList.toggle('on', on);
+      if (supportsInert) el.inert = !on;
+      else el.setAttribute('aria-hidden', String(!on));
+    });
+    if (idx !== -1) current = idx;
+    dots.forEach((d, i) => {
+      const on = i === current;
+      d.classList.toggle('on', on);
+      if (on) d.setAttribute('aria-current', 'step');
+      else d.removeAttribute('aria-current');
+    });
+    nextBtn.textContent = current === SCENES.length - 1 ? 'Repetir ↻' : 'Siguiente →';
+    updateInvite();
+  }
+
+  /* ---------- Nombre letra a letra ---------- */
+  const bigName = $('big-name');
+  bigName.textContent = '';
+  [...'Brenda'].forEach((ch, i) => {
+    const s = document.createElement('span');
+    s.className = 'glyph';
+    s.style.setProperty('--i', i);
+    s.setAttribute('aria-hidden', 'true');
+    s.textContent = ch;
+    bigName.appendChild(s);
+  });
+
+  /* ---------- Nube de palabras (cuadrícula con variación, sin encimarse) ---------- */
+  const WORDS = [
+    'Te amo', 'Mi amor', 'Mi vida', 'Mi sol', 'Contigo', 'Siempre', 'Eternamente', 'Corazón',
+    'Ternura', 'Dulzura', 'Mi reina', 'Hermosa', 'Mi todo', 'Por siempre', 'Te quiero', 'Mi alma',
+    'Enamorada', 'Destino', 'Bonita', 'Mi luz', 'Mi cielo', 'Mi sueño', 'Te adoro', 'Mía', 'Ilusión',
+    'Cariño', 'Mi universo', 'Suspiro', 'Abrazo', 'Bésame', 'Mi hogar', 'Mi paz', 'Sonrisa',
+    'Mi tesoro', 'Latido', 'Melodía', 'Mi estrella', 'Pasión', 'Promesa', 'Mi razón', 'Para siempre'
+  ];
+  const FONTS = ['f-script', 'f-display', 'f-body'];
+  const COLORS = ['#ffd1dc', '#ff8fab', '#f7d38a', '#ffb3c6', '#fff1f5', '#ff5c8a'];
+
+  function spawnWords() {
+    const box = $('words');
+    box.textContent = '';
+    const narrow = window.innerWidth < 480;
+    const cols = narrow ? 3 : 5;
+    const rows = window.innerHeight < 720 ? 4 : 5;
+
+    const cells = [];
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const cx = 6 + ((c + 0.5) / cols) * 88;
+        const cy = 12 + ((r + 0.5) / rows) * 76;
+        if (Math.abs(cx - 50) < 22 && Math.abs(cy - 50) < 15) continue; // deja el centro para el título
+        cells.push({ cx, cy });
+      }
+    }
+    shuffle(cells);
+
+    const count = Math.min(cells.length, narrow ? 14 : 20);
+    const picks = shuffle([...WORDS]).slice(0, count);
+    const jx = narrow ? 2.5 : 4;
+    const jy = narrow ? 2.5 : 3;
+
+    picks.forEach((word, i) => {
+      const cell = cells[i];
+      const el = document.createElement('span');
+      el.className = 'word ' + FONTS[i % FONTS.length];
+      el.textContent = word;
+      el.style.left = (cell.cx + rnd(-jx, jx)).toFixed(1) + '%';
+      el.style.top = (cell.cy + rnd(-jy, jy)).toFixed(1) + '%';
+      el.style.fontSize = rnd(0.92, 1.75).toFixed(2) + 'rem';
+      el.style.color = COLORS[i % COLORS.length];
+      el.style.animationDelay =
+        Math.min(i * 0.12, 2.6).toFixed(2) + 's, ' + rnd(-6.5, 0).toFixed(2) + 's';
+      box.appendChild(el);
+    });
+  }
+
+  /* ---------- Lienzo: corazones, estelas y destellos ---------- */
+  const canvas = $('fx');
+  const ctx = canvas.getContext('2d');
+  const HEART = new Path2D('M50 90 C50 90 4 60 4 30 C4 13 17 2 32 2 C41 2 47 7 50 14 C53 7 59 2 68 2 C83 2 96 13 96 30 C96 60 50 90 50 90 Z');
+  let W = 0, H = 0;
+
+  function resize() {
+    const dpr = Math.min(2, window.devicePixelRatio || 1);
+    W = window.innerWidth;
+    H = window.innerHeight;
+    canvas.width = Math.round(W * dpr);
+    canvas.height = Math.round(H * dpr);
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  }
+  resize();
+
+  function drawHeart(x, y, size, rot) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rot);
+    ctx.scale(size / 100, size / 100);
+    ctx.translate(-50, -46);
+    ctx.fill(HEART);
+    ctx.restore();
+  }
+
+  const parts = [];
+  const bursts = [];
+  const trail = [];
+  let lastTrailAt = 0;
+
+  function makePart(fromBottom) {
+    return {
+      x: rnd(0, W),
+      y: fromBottom ? H + 30 : rnd(0, H),
+      s: rnd(14, 26),
+      vy: rnd(0.25, 0.75),
+      drift: rnd(-0.24, 0.24),
+      wob: rnd(0, Math.PI * 2),
+      r: rnd(-0.35, 0.35),
+      vr: rnd(-0.01, 0.01),
+      a: rnd(0.18, 0.6),
+      heart: Math.random() < 0.72
+    };
+  }
+  const partCount = window.innerWidth < 480 ? 28 : 46;
+  for (let i = 0; i < partCount; i++) parts.push(makePart(false));
+
+  function spawnBurst(x, y, total = 14) {
+    if (reduceMotion) return;
+    for (let i = 0; i < total; i++) {
+      const angle = (Math.PI * 2 * i) / total + rnd(-0.2, 0.2);
+      const speed = rnd(1.1, 3.4);
+      bursts.push({
+        x,
+        y,
+        vx: Math.cos(angle) * speed,
+        vy: Math.sin(angle) * speed - 0.85,
+        s: rnd(12, 20),
+        rot: rnd(0, Math.PI),
+        spin: rnd(-0.08, 0.08),
+        alpha: 0.95,
+        decay: rnd(0.014, 0.024),
+        color: i % 3 === 0 ? '#f7d38a' : '#ff5c8a'
+      });
+    }
+  }
+
+  function addTrail(x, y) {
+    if (reduceMotion) return;
+    const now = performance.now();
+    if (now - lastTrailAt < 36) return;
+    lastTrailAt = now;
+    trail.push({
+      x: x + rnd(-4, 4),
+      y: y + rnd(-4, 4),
+      r: rnd(2.2, 4.5),
+      alpha: 0.7,
+      color: Math.random() < 0.35 ? '#f7d38a' : '#ffd1dc'
+    });
+  }
+
+  function render() {
+    ctx.clearRect(0, 0, W, H);
+
+    for (const p of parts) {
+      ctx.globalAlpha = p.a;
+      if (p.heart) {
+        ctx.fillStyle = '#ff5c8a';
+        drawHeart(p.x, p.y, p.s, p.r);
+      } else {
+        ctx.fillStyle = '#f7d38a';
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.s * 0.14, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    for (const sp of trail) {
+      ctx.globalAlpha = Math.max(0, sp.alpha);
+      ctx.fillStyle = sp.color;
+      ctx.beginPath();
+      ctx.arc(sp.x, sp.y, sp.r, 0, Math.PI * 2);
+      ctx.fill();
+    }
+
+    for (const b of bursts) {
+      ctx.globalAlpha = Math.max(0, b.alpha);
+      ctx.fillStyle = b.color;
+      drawHeart(b.x, b.y, b.s, b.rot);
+    }
+
+    ctx.globalAlpha = 1;
+  }
+
+  function tick() {
+    for (const p of parts) {
+      p.y -= p.vy;
+      p.wob += 0.01;
+      p.x += p.drift + Math.sin(p.wob) * 0.35;
+      p.r += p.vr;
+      if (p.y < -40) Object.assign(p, makePart(true));
+    }
+
+    for (let i = trail.length - 1; i >= 0; i--) {
+      const sp = trail[i];
+      sp.y -= 0.45;
+      sp.r *= 0.95;
+      sp.alpha -= 0.025;
+      if (sp.alpha <= 0 || sp.r < 0.3) trail.splice(i, 1);
+    }
+
+    for (let i = bursts.length - 1; i >= 0; i--) {
+      const b = bursts[i];
+      b.x += b.vx;
+      b.y += b.vy;
+      b.vy += 0.04;
+      b.vx *= 0.985;
+      b.rot += b.spin;
+      b.alpha -= b.decay;
+      if (b.alpha <= 0) bursts.splice(i, 1);
+    }
+
+    render();
+    requestAnimationFrame(tick);
+  }
+
+  if (reduceMotion) render();
+  else requestAnimationFrame(tick);
+
+  stage.addEventListener('pointerdown', (e) => {
+    if (e.target.closest && e.target.closest('button, input')) return;
+    spawnBurst(e.clientX, e.clientY, 10);
+  });
+
+  stage.addEventListener('pointermove', (e) => {
+    if (e.pointerType === 'mouse' || e.buttons > 0) addTrail(e.clientX, e.clientY);
+  }, { passive: true });
+
+  let touchX = 0;
+  let touchY = 0;
+  stage.addEventListener('touchstart', (e) => {
+    if (!e.touches.length) return;
+    touchX = e.touches[0].clientX;
+    touchY = e.touches[0].clientY;
+  }, { passive: true });
+
+  stage.addEventListener('touchend', (e) => {
+    if (!body.classList.contains('started') || !e.changedTouches.length) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    const dy = e.changedTouches[0].clientY - touchY;
+    if (Math.abs(dx) < 65 || Math.abs(dx) < Math.abs(dy) * 1.4) return;
+    if (dx < 0) goTo(current + 1);
+    else goTo(current - 1);
+  }, { passive: true });
+
+  let resizeTimer = null;
+  window.addEventListener('resize', () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(() => {
+      resize();
+      for (const p of parts) {
+        if (p.x > W) p.x = rnd(0, W);
+        if (p.y > H) p.y = rnd(0, H);
+      }
+      if (reduceMotion) render();
+    }, 150);
+  });
+
+  /* ---------- Confeti ---------- */
+  let confettiLayer = null;
+  function launchConfetti() {
+    if (reduceMotion) return;
+    if (!confettiLayer) {
+      confettiLayer = document.createElement('div');
+      confettiLayer.className = 'confetti-layer';
+      confettiLayer.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(confettiLayer);
+    }
+    const colors = ['#ff5c8a', '#ffd1dc', '#f7d38a', '#ff8fab', '#fff1f5', '#e0245e'];
+    const count = Math.min(72, Math.floor(W / 12));
+    for (let i = 0; i < count; i++) {
+      const piece = document.createElement('span');
+      piece.className = 'confetti-piece';
+      const dur = rnd(3.2, 5.8);
+      piece.style.left = rnd(2, 98).toFixed(1) + '%';
+      piece.style.background = colors[i % colors.length];
+      piece.style.width = rnd(7, 11).toFixed(1) + 'px';
+      piece.style.height = rnd(11, 16).toFixed(1) + 'px';
+      piece.style.animationDuration = dur.toFixed(2) + 's';
+      piece.style.animationDelay = rnd(0, 1.4).toFixed(2) + 's';
+      confettiLayer.appendChild(piece);
+      setTimeout(() => piece.remove(), (dur + 1.6) * 1000);
+    }
+  }
+
+  /* ---------- Secuencia con cancelación limpia ---------- */
+  let run = 0;
+  let pendingTimer = null;
+  let pendingResolve = null;
+
+  function cancelWait() {
+    if (pendingTimer) {
+      clearTimeout(pendingTimer);
+      pendingTimer = null;
+    }
+    if (pendingResolve) {
+      const r = pendingResolve;
+      pendingResolve = null;
+      r(false);
+    }
+  }
+
+  function wait(ms, id) {
+    return new Promise((resolve) => {
+      pendingResolve = resolve;
+      pendingTimer = setTimeout(() => {
+        pendingTimer = null;
+        pendingResolve = null;
+        resolve(id === run);
+      }, ms * SPEED);
+    });
+  }
+
+  async function play(from = 0) {
+    const id = ++run;
+    cancelWait();
+    const pause = (ms) => wait(ms, id);
+    finalEl.classList.remove('go');
+
+    if (from <= 0) {
+      showScene(null);
+      void stage.offsetWidth;
+      showScene('s-intro');
+      if (!(await pause(3400))) return;
+    }
+
+    if (from <= 1) {
+      showScene('s-words');
+      spawnWords();
+      if (!(await pause(5200))) return;
+    }
+
+    if (from <= 2) {
+      showScene('s-letter');
+      letterLines.forEach((l) => l.classList.remove('shown'));
+      for (const line of letterLines) {
+        line.classList.add('shown');
+        if (!(await pause(1100))) return;
+      }
+      if (!(await pause(1600))) return;
+    }
+
+    if (from <= 3) {
+      showScene('s-pulse');
+      if (!(await pause(4200))) return;
+    }
+
+    showScene('s-final');
+    if (!(await pause(150))) return;
+    finalEl.classList.add('go');
+    spawnBurst(W * 0.5, H * 0.36, 18);
+    launchConfetti();
+  }
+
+  function goTo(index) {
+    const n = SCENES.length;
+    play(((index % n) + n) % n);
+  }
+
+  $('again').addEventListener('click', () => play(0));
+  nextBtn.addEventListener('click', () => goTo(current + 1));
+  dots.forEach((d) => {
+    d.addEventListener('click', () => goTo(Number(d.dataset.scene)));
+  });
+
+  /* ---------- Música: sintetizador con programador de notas (lookahead) ---------- */
+  const BEAT = 0.42;
+  const PHRASE = [
+    { f: 587.33, beats: 1.5, chord: [146.83, 220.00, 349.23], arp: [293.66, 349.23, 440.00] },
+    { f: 523.25, beats: 0.5, arp: [523.25, 440.00] },
+    { f: 440.00, beats: 1.0, arp: [293.66, 349.23, 440.00] },
+    { f: 349.23, beats: 1.0, arp: [220.00, 293.66, 349.23] },
+    { f: 392.00, beats: 1.5, chord: [116.54, 174.61, 293.66], arp: [233.08, 293.66, 349.23] },
+    { f: 440.00, beats: 0.5, arp: [440.00, 392.00] },
+    { f: 466.16, beats: 1.0, arp: [233.08, 293.66, 466.16] },
+    { f: 392.00, beats: 1.0, arp: [174.61, 233.08, 392.00] },
+    { f: 329.63, beats: 1.5, chord: [130.81, 196.00, 329.63], arp: [261.63, 329.63, 392.00] },
+    { f: 392.00, beats: 0.5, arp: [392.00, 329.63] },
+    { f: 523.25, beats: 1.0, arp: [261.63, 392.00, 523.25] },
+    { f: 493.88, beats: 1.0, arp: [196.00, 329.63, 493.88] },
+    { f: 440.00, beats: 1.5, chord: [110.00, 164.81, 277.18], arp: [220.00, 277.18, 329.63] },
+    { f: 415.30, beats: 0.5, arp: [415.30, 329.63] },
+    { f: 440.00, beats: 2.0, arp: [220.00, 277.18, 440.00] },
+    { f: 587.33, beats: 1.0, chord: [146.83, 220.00, 349.23], arp: [293.66, 440.00, 587.33] },
+    { f: 659.25, beats: 1.0, arp: [349.23, 523.25, 659.25] },
+    { f: 698.46, beats: 1.5, arp: [293.66, 440.00, 698.46] },
+    { f: 659.25, beats: 0.5, arp: [659.25, 587.33] },
+    { f: 587.33, beats: 1.0, chord: [116.54, 174.61, 293.66], arp: [233.08, 349.23, 587.33] },
+    { f: 523.25, beats: 1.0, arp: [233.08, 349.23, 523.25] },
+    { f: 466.16, beats: 2.0, arp: [233.08, 293.66, 466.16] },
+    { f: 440.00, beats: 1.0, chord: [98.00, 146.83, 233.08], arp: [196.00, 293.66, 440.00] },
+    { f: 392.00, beats: 1.0, arp: [196.00, 293.66, 392.00] },
+    { f: 349.23, beats: 1.0, arp: [164.81, 277.18, 349.23] },
+    { f: 329.63, beats: 1.0, arp: [164.81, 220.00, 329.63] },
+    { f: 293.66, beats: 2.0, chord: [146.83, 220.00, 349.23], arp: [146.83, 220.00, 293.66] },
+    { f: 329.63, beats: 1.0, arp: [220.00, 293.66, 329.63] },
+    { f: 349.23, beats: 1.0, arp: [220.00, 293.66, 349.23] }
+  ];
+
+  let audioCtx = null;
+  let master = null;
+  let schedTimer = null;
+  let nextNote = 0;
+  let stepIdx = 0;
+  let lastFreq = null;
+
+  function volumeLevel() {
+    const v = parseFloat(volumeInput.value);
+    return Number.isFinite(v) ? Math.min(1, Math.max(0, v)) : 0.75;
+  }
+
+  function ensureAudio() {
+    if (audioCtx) return;
+    const Ctor = window.AudioContext || window.webkitAudioContext;
+    if (!Ctor) throw new Error('AudioContext no disponible');
+
+    audioCtx = new Ctor();
+    master = audioCtx.createGain();
+    master.gain.value = 0.0001;
+
+    const lowpass = audioCtx.createBiquadFilter();
+    lowpass.type = 'lowpass';
+    lowpass.frequency.value = 2350;
+    lowpass.Q.value = 0.7;
+
+    const delay = audioCtx.createDelay(1.0);
+    delay.delayTime.value = 0.28;
+    const feedback = audioCtx.createGain();
+    feedback.gain.value = 0.22;
+    const wet = audioCtx.createGain();
+    wet.gain.value = 0.28;
+
+    master.connect(lowpass);
+    lowpass.connect(audioCtx.destination);
+    lowpass.connect(delay);
+    delay.connect(feedback);
+    feedback.connect(delay);
+    delay.connect(wet);
+    wet.connect(audioCtx.destination);
+  }
+
+  function tone(freq, t, dur, peak, type, detune, glideFrom, attack) {
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = type;
+    o.detune.setValueAtTime(detune || 0, t);
+    if (glideFrom) {
+      o.frequency.setValueAtTime(glideFrom, t);
+      o.frequency.exponentialRampToValueAtTime(freq, t + 0.085);
+    } else {
+      o.frequency.setValueAtTime(freq, t);
+    }
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.linearRampToValueAtTime(peak, t + (attack || 0.03));
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g);
+    g.connect(master);
+    o.start(t);
+    o.stop(t + dur + 0.05);
+  }
+
+  function playStep(item, t) {
+    const dur = item.beats * BEAT;
+
+    if (item.chord) {
+      const padLen = Math.min(dur * 1.5, 2.3);
+      item.chord.forEach((f, i) => {
+        tone(f, t, padLen, i === 0 ? 0.02 : 0.009, i === 0 ? 'sine' : 'triangle', 0, null, 0.16);
+      });
+    }
+
+    if (item.arp) {
+      const gap = Math.max(0.09, Math.min(0.18, dur / (item.arp.length + 1)));
+      item.arp.forEach((f, i) => {
+        tone(f, t + i * gap, gap * 2.2, 0.012, 'sine', 0, null, 0.03);
+      });
+    }
+
+    const glide = lastFreq && Math.abs(Math.log2(item.f / lastFreq)) < 0.5 ? lastFreq : null;
+    const len = Math.max(dur * 0.96, 0.25);
+    tone(item.f, t, len, 0.02, 'triangle', -4, glide, 0.065);
+    tone(item.f, t, len, 0.02, 'triangle', 4, glide, 0.065);
+    lastFreq = item.f;
+  }
+
+  function pump() {
+    if (!audioCtx || audioCtx.state !== 'running') return;
+    if (nextNote < audioCtx.currentTime) nextNote = audioCtx.currentTime + 0.05;
+    const horizon = audioCtx.currentTime + 0.25;
+    while (nextNote < horizon) {
+      const item = PHRASE[stepIdx % PHRASE.length];
+      playStep(item, nextNote);
+      nextNote += item.beats * BEAT;
+      stepIdx++;
+    }
+  }
+
+  function halt() {
+    if (schedTimer) {
+      clearInterval(schedTimer);
+      schedTimer = null;
+    }
+    if (audioCtx && master) {
+      master.gain.cancelScheduledValues(audioCtx.currentTime);
+      master.gain.setTargetAtTime(0.0001, audioCtx.currentTime, 0.15);
+    }
+  }
+
+  async function musicStart() {
+    if (musicFailed) return false;
+    try {
+      ensureAudio();
+      if (audioCtx.state !== 'running') await audioCtx.resume();
+    } catch (err) {
+      musicFailed = true;
+      musicBtn.disabled = true;
+      musicBtn.textContent = 'Sonido no disponible';
+      return false;
+    }
+
+    resumeOnShow = false;
+    if (!schedTimer) {
+      nextNote = audioCtx.currentTime + 0.06;
+      master.gain.cancelScheduledValues(audioCtx.currentTime);
+      master.gain.setTargetAtTime(volumeLevel(), audioCtx.currentTime, 0.35);
+      pump();
+      schedTimer = setInterval(pump, 40);
+    }
+    musicOn = true;
+    setMusicUI();
+    return true;
+  }
+
+  function musicStop() {
+    resumeOnShow = false;
+    halt();
+    musicOn = false;
+    setMusicUI();
+  }
+
+  function toggleMusic() {
+    if (musicOn) musicStop();
+    else musicStart();
+  }
+
+  function setMusicUI() {
+    musicBtn.setAttribute('aria-pressed', String(musicOn));
+    musicBtn.textContent = musicOn ? 'Pausar música' : 'Activar música';
+    updateInvite();
+  }
+
+  function updateInvite() {
+    musicBtn.classList.toggle('invite', !musicOn && !musicFailed && current === SCENES.length - 1);
+  }
+
+  musicBtn.addEventListener('click', toggleMusic);
+
+  volumeInput.addEventListener('input', () => {
+    if (audioCtx && master && schedTimer) {
+      master.gain.setTargetAtTime(volumeLevel(), audioCtx.currentTime, 0.06);
+    }
+  });
+
+  // Si la pestaña se oculta, se pausa; al volver, la música retoma sola.
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      if (schedTimer) {
+        resumeOnShow = true;
+        halt();
+      }
+    } else if (resumeOnShow) {
+      musicStart();
+    }
+  });
+
+  /* ---------- Teclado ---------- */
+  document.addEventListener('keydown', (e) => {
+    if (e.target instanceof Element && e.target.closest('input, textarea, select')) return;
+
+    if (!body.classList.contains('started')) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        beginExperience();
+      }
+      return;
+    }
+
+    if (e.key === 'ArrowRight' || e.key === ' ') {
+      e.preventDefault();
+      goTo(current + 1);
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      goTo(current - 1);
+    } else if (e.key === 'm' || e.key === 'M') {
+      e.preventDefault();
+      toggleMusic();
+    }
+  });
+
+  /* ---------- Arranque (dentro del gesto del usuario para desbloquear audio) ---------- */
+  const fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+
+  function beginExperience() {
+    if (body.classList.contains('started')) return;
+    body.classList.add('started');
+    intro.classList.add('hidden');
+    if (supportsInert) intro.inert = true;
+    setTimeout(() => { intro.style.display = 'none'; }, 1250);
+
+    musicStart();
+
+    Promise.race([fontsReady, new Promise((r) => setTimeout(r, 2500))])
+      .then(() => play(0));
+  }
+
+  startBtn.addEventListener('click', beginExperience);
+})();
+</script>
